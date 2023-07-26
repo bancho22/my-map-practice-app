@@ -1,14 +1,35 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import mapboxgl from 'mapbox-gl'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import mapboxTokenTxt from './config/mapbox-access-token.txt'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [mapboxToken, setMapboxToken] = useState('')
+
+  const loadToken = useCallback(async() => {
+    const rawToken = await fetch(mapboxTokenTxt)
+    const token = await rawToken.text()
+    setMapboxToken(token)
+  })
+
+  useEffect(() => {
+    loadToken()
+    if( mapboxToken ) {
+      mapboxgl.accessToken = mapboxToken
+      const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/streets-v12', // style URL
+        center: [24, 42], // starting position [lng, lat]
+        zoom: 9, // starting zoom
+      })
+    }
+  }, [mapboxToken, loadToken])
 
   return (
     <>
-      <div>
+      <div id='logos'>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -16,18 +37,7 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div id='map' />
     </>
   )
 }

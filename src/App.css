@@ -5,6 +5,23 @@
   text-align: center;
 }
 
+#logos {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+#map {
+  height: 80%;
+  position: absolute;
+  top: 20%;
+  left: 0;
+  right: 0;
+  background: gray;
+  width: 100%;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -31,12 +48,4 @@
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
